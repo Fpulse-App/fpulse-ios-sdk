@@ -1,27 +1,56 @@
-# FeedbackPulse iOS SDK
+<p align="center">
+  <img src="https://fpulse.app/static/img/logo.svg" alt="Feedback Pulse" width="80" height="80">
+</p>
 
-Official iOS SDK for [Feedback Pulse](https://fpulse.app) - Collect user feedback in your iOS and macOS apps.
+<h1 align="center">FeedbackPulse iOS SDK</h1>
 
-## Requirements
+<p align="center">
+  <strong>Collect user feedback in your iOS and macOS apps with ease</strong>
+</p>
 
-- iOS 14.0+ / macOS 11.0+
-- Swift 5.7+
-- Xcode 14.0+
+<p align="center">
+  <a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-5.7+-orange.svg" alt="Swift 5.7+"></a>
+  <a href="https://developer.apple.com/ios/"><img src="https://img.shields.io/badge/iOS-14.0+-blue.svg" alt="iOS 14.0+"></a>
+  <a href="https://developer.apple.com/macos/"><img src="https://img.shields.io/badge/macOS-11.0+-blue.svg" alt="macOS 11.0+"></a>
+  <a href="https://swift.org/package-manager/"><img src="https://img.shields.io/badge/SPM-compatible-brightgreen.svg" alt="SPM Compatible"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT License"></a>
+</p>
+
+<p align="center">
+  <a href="#installation">Installation</a> •
+  <a href="#quick-start">Quick Start</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#swiftui-view">SwiftUI View</a> •
+  <a href="#api-reference">API Reference</a>
+</p>
+
+---
+
+## Features
+
+- **Simple Integration** — Get started with just 2 lines of code
+- **SwiftUI Ready** — Pre-built feedback UI with `.feedbackSheet()` modifier
+- **Async/Await** — Modern concurrency support for iOS 15+
+- **Automatic Metadata** — Captures device info, OS version, and app details
+- **Lightweight** — No external dependencies, pure Swift
+
+---
 
 ## Installation
 
 ### Swift Package Manager
 
-Add FeedbackPulse to your project using Swift Package Manager:
+Add FeedbackPulse to your project in Xcode:
 
-1. In Xcode, go to **File > Add Package Dependencies**
+1. Go to **File → Add Package Dependencies**
 2. Enter the repository URL:
    ```
    https://github.com/ztuskes/feedbackPulse
    ```
-3. Select the version and click **Add Package**
+3. Select version **1.0.0** or later
+4. Click **Add Package**
 
-Or add it to your `Package.swift`:
+**Or** add it to your `Package.swift`:
 
 ```swift
 dependencies: [
@@ -29,71 +58,81 @@ dependencies: [
 ]
 ```
 
+---
+
 ## Quick Start
 
 ### 1. Configure the SDK
 
-Configure FeedbackPulse in your app's initialization (e.g., `AppDelegate` or `@main App`):
-
 ```swift
 import FeedbackPulse
 
-// In your AppDelegate or App init
-FeedbackPulse.configure(apiKey: "fp_your_api_key_here")
+// In AppDelegate or @main App
+FeedbackPulse.configure(apiKey: "fp_your_api_key")
 ```
 
-Get your API key from the [Feedback Pulse Dashboard](https://fpulse.app/dashboard/settings).
+> Get your API key from the [Feedback Pulse Dashboard](https://fpulse.app/dashboard/settings)
 
-### 2. Submit Feedback
-
-#### Programmatic Submission
+### 2. Collect Feedback
 
 ```swift
-// Simple submission
-FeedbackPulse.submit(sentiment: .positive) { result in
+// Simple one-liner
+FeedbackPulse.submit(sentiment: .positive)
+
+// With comment
+FeedbackPulse.submit(sentiment: .negative, comment: "App crashes on login")
+```
+
+That's it! Feedback will appear in your dashboard.
+
+---
+
+## Usage
+
+### Submit with Callback
+
+```swift
+FeedbackPulse.submit(
+    sentiment: .positive,
+    comment: "Love this app!",
+    metadata: ["screen": "home", "user_id": "12345"]
+) { result in
     switch result {
     case .success(let response):
-        print("Feedback submitted: \(response.feedbackId)")
+        print("Submitted: \(response.feedbackId)")
     case .failure(let error):
         print("Error: \(error.localizedDescription)")
     }
 }
-
-// With comment
-FeedbackPulse.submit(
-    sentiment: .negative,
-    comment: "The app crashes when I tap the button"
-) { result in
-    // Handle result
-}
-
-// With custom metadata
-FeedbackPulse.submit(
-    sentiment: .neutral,
-    comment: "Could be better",
-    metadata: ["screen": "settings", "user_id": "12345"]
-) { result in
-    // Handle result
-}
 ```
 
-#### Using async/await (iOS 15+)
+### Submit with Async/Await (iOS 15+)
 
 ```swift
 do {
     let response = try await FeedbackPulse.submit(
         sentiment: .positive,
-        comment: "Love this app!"
+        comment: "Great experience!"
     )
-    print("Submitted: \(response.feedbackId)")
+    print("Feedback ID: \(response.feedbackId)")
 } catch {
     print("Error: \(error)")
 }
 ```
 
-### 3. Pre-built Feedback UI (SwiftUI)
+### Sentiment Options
 
-Use the built-in feedback view for a ready-to-use UI:
+| Sentiment | Description |
+|-----------|-------------|
+| `.positive` | User is happy |
+| `.neutral` | User is okay |
+| `.negative` | User is unhappy |
+
+---
+
+## SwiftUI View
+
+Use the built-in feedback UI for a polished experience:
 
 ```swift
 import SwiftUI
@@ -111,7 +150,7 @@ struct ContentView: View {
 }
 ```
 
-#### Customize the Feedback View
+### Customize the View
 
 ```swift
 .feedbackSheet(
@@ -125,59 +164,55 @@ struct ContentView: View {
 )
 ```
 
-Or use `FeedbackView` directly:
+---
 
-```swift
-FeedbackView(
-    title: "Send Feedback",
-    subtitle: "Help us improve",
-    primaryColor: .green,
-    onSubmit: { sentiment, comment in
-        // Custom handling
-    },
-    onDismiss: {
-        // Handle dismissal
-    }
-)
-```
-
-## Configuration Options
+## Configuration
 
 ### Environment
 
-Send feedback to different environments (useful for separating dev/prod data):
+Separate development and production feedback:
 
 ```swift
+// Development (for testing)
+FeedbackPulse.configure(apiKey: "fp_xxx", environment: .development)
+
 // Production (default)
 FeedbackPulse.configure(apiKey: "fp_xxx", environment: .production)
-
-// Development
-FeedbackPulse.configure(apiKey: "fp_xxx", environment: .development)
 ```
 
 ### Debug Mode
 
-Enable debug logging:
+Enable console logging:
 
 ```swift
 FeedbackPulse.shared.debugMode = true
 ```
 
-### Custom Base URL
+---
 
-For self-hosted or testing:
+## API Reference
 
-```swift
-FeedbackPulse.setBaseURL(URL(string: "https://your-server.com/v1")!)
-```
+### `FeedbackPulse.configure(apiKey:environment:)`
 
-## Sentiment Options
+Initialize the SDK with your API key.
 
-- `.positive` - User is happy
-- `.neutral` - User is okay
-- `.negative` - User is unhappy
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `apiKey` | `String` | required | Your Feedback Pulse API key |
+| `environment` | `FeedbackEnvironment` | `.production` | Target environment |
 
-## Automatic Metadata
+### `FeedbackPulse.submit(sentiment:comment:metadata:completion:)`
+
+Submit feedback to your dashboard.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `sentiment` | `FeedbackSentiment` | required | `.positive`, `.neutral`, or `.negative` |
+| `comment` | `String?` | `nil` | Optional user comment |
+| `metadata` | `[String: Any]?` | `nil` | Custom metadata dictionary |
+| `completion` | `Result<FeedbackResponse, FeedbackError>` | required | Callback with result |
+
+### Automatic Metadata
 
 The SDK automatically collects:
 
@@ -188,14 +223,13 @@ The SDK automatically collects:
 - App version & build number
 - SDK version
 
+---
+
 ## Error Handling
 
 ```swift
 FeedbackPulse.submit(sentiment: .positive) { result in
-    switch result {
-    case .success(let response):
-        // Handle success
-    case .failure(let error):
+    if case .failure(let error) = result {
         switch error {
         case .notConfigured:
             // SDK not initialized
@@ -208,11 +242,13 @@ FeedbackPulse.submit(sentiment: .positive) { result in
         case .httpError(let statusCode):
             // Server error
         default:
-            // Other error
+            break
         }
     }
 }
 ```
+
+---
 
 ## Example App
 
@@ -224,6 +260,7 @@ import FeedbackPulse
 struct MyApp: App {
     init() {
         FeedbackPulse.configure(apiKey: "fp_your_api_key")
+
         #if DEBUG
         FeedbackPulse.shared.debugMode = true
         FeedbackPulse.configure(apiKey: "fp_your_api_key", environment: .development)
@@ -255,12 +292,33 @@ struct ContentView: View {
 }
 ```
 
+---
+
+## Requirements
+
+| Requirement | Minimum Version |
+|-------------|-----------------|
+| Swift | 5.7+ |
+| iOS | 14.0+ |
+| macOS | 11.0+ |
+| Xcode | 14.0+ |
+
+---
+
 ## Support
 
-- Documentation: [https://fpulse.app/docs](https://fpulse.app/docs)
-- Issues: [GitHub Issues](https://github.com/ztuskes/feedbackPulse/issues)
-- Email: support@fpulse.app
+- **Documentation**: [fpulse.app/docs](https://fpulse.app/docs)
+- **Issues**: [GitHub Issues](https://github.com/ztuskes/feedbackPulse/issues)
+- **Email**: support@fpulse.app
+
+---
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<p align="center">
+  Made with ❤️ by <a href="https://fpulse.app">Feedback Pulse</a>
+</p>
