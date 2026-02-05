@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://fpulse.app/static/img/logo.svg" alt="Feedback Pulse" width="80" height="80">
+  <img src="https://fpulse.app/static/images/logo100x100.png" alt="Feedback Pulse" width="80" height="80">
 </p>
 
 <h1 align="center">FeedbackPulse iOS SDK</h1>
