@@ -1,0 +1,31 @@
+# Xcode
+.DS_Store
+build/
+DerivedData/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# Xcode Playground
+timeline.xctimeline
+playground.xcworkspace
+
+# CocoaPods (if ever added)
+Pods/
+
+# Carthage (if ever added)
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Code Injection
+iOSInjectionProject/
