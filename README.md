@@ -17,7 +17,7 @@ Add FeedbackPulse to your project using Swift Package Manager:
 1. In Xcode, go to **File > Add Package Dependencies**
 2. Enter the repository URL:
    ```
-   https://github.com/feedbackpulse/feedbackpulse-ios
+   https://github.com/ztuskes/feedbackPulse
    ```
 3. Select the version and click **Add Package**
 
@@ -25,7 +25,7 @@ Or add it to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/feedbackpulse/feedbackpulse-ios", from: "1.0.0")
+    .package(url: "https://github.com/ztuskes/feedbackPulse", from: "1.0.0")
 ]
 ```
 
@@ -258,7 +258,7 @@ struct ContentView: View {
 ## Support
 
 - Documentation: [https://fpulse.app/docs](https://fpulse.app/docs)
-- Issues: [GitHub Issues](https://github.com/feedbackpulse/feedbackpulse-ios/issues)
+- Issues: [GitHub Issues](https://github.com/ztuskes/feedbackPulse/issues)
 - Email: support@fpulse.app
 
 ## License
