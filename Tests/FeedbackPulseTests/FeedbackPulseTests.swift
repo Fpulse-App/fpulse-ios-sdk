@@ -58,6 +58,13 @@ final class FeedbackPulseTests: XCTestCase {
         XCTAssertEqual(response.message, "Feedback received")
     }
 
+    func testRatingTypeRawValues() {
+        XCTAssertEqual(RatingType.thumbs.rawValue, "thumbs")
+        XCTAssertEqual(RatingType.emoji.rawValue, "emoji")
+        XCTAssertEqual(RatingType.stars.rawValue, "stars")
+        XCTAssertEqual(RatingType.nps.rawValue, "nps")
+    }
+
     func testDebugModeToggle() {
         FeedbackPulse.shared.debugMode = true
         XCTAssertTrue(FeedbackPulse.shared.debugMode)

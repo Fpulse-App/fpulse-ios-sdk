@@ -78,6 +78,32 @@ public final class FeedbackPulse {
         shared.submitFeedback(
             sentiment: sentiment,
             comment: comment,
+            ratingType: nil,
+            ratingScore: nil,
+            metadata: metadata,
+            completion: completion
+        )
+    }
+
+    /// Submit feedback with a rating type and score
+    /// - Parameters:
+    ///   - ratingType: The type of rating (emoji, stars, or nps)
+    ///   - ratingScore: The numeric score (emoji/stars: 1-5, nps: 0-10)
+    ///   - comment: Optional text comment from the user
+    ///   - metadata: Optional dictionary of additional metadata
+    ///   - completion: Callback with result
+    public static func submit(
+        ratingType: RatingType,
+        ratingScore: Int,
+        comment: String? = nil,
+        metadata: [String: Any]? = nil,
+        completion: @escaping (Result<FeedbackResponse, FeedbackError>) -> Void
+    ) {
+        shared.submitFeedback(
+            sentiment: nil,
+            comment: comment,
+            ratingType: ratingType,
+            ratingScore: ratingScore,
             metadata: metadata,
             completion: completion
         )
@@ -97,11 +123,28 @@ public final class FeedbackPulse {
         }
     }
 
+    /// Submit feedback with a rating type and score (async/await)
+    @available(iOS 15.0, macOS 12.0, *)
+    public static func submit(
+        ratingType: RatingType,
+        ratingScore: Int,
+        comment: String? = nil,
+        metadata: [String: Any]? = nil
+    ) async throws -> FeedbackResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            submit(ratingType: ratingType, ratingScore: ratingScore, comment: comment, metadata: metadata) { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+
     // MARK: - Private Methods
 
     private func submitFeedback(
-        sentiment: FeedbackSentiment,
+        sentiment: FeedbackSentiment?,
         comment: String?,
+        ratingType: RatingType?,
+        ratingScore: Int?,
         metadata: [String: Any]?,
         completion: @escaping (Result<FeedbackResponse, FeedbackError>) -> Void
     ) {
@@ -117,9 +160,19 @@ public final class FeedbackPulse {
         request.setValue(apiKey, forHTTPHeaderField: "X-API-Key")
 
         var body: [String: Any] = [
-            "sentiment": sentiment.rawValue,
             "environment": environment.rawValue
         ]
+
+        // Rating type mode: send rating_type + rating_score (server normalizes sentiment)
+        if let ratingType = ratingType, let ratingScore = ratingScore {
+            body["rating_type"] = ratingType.rawValue
+            body["rating_score"] = ratingScore
+        }
+
+        // Classic mode: send sentiment directly
+        if let sentiment = sentiment {
+            body["sentiment"] = sentiment.rawValue
+        }
 
         if let comment = comment, !comment.isEmpty {
             body["comment"] = comment
@@ -142,7 +195,11 @@ public final class FeedbackPulse {
         }
 
         if debugMode {
-            print("[FeedbackPulse] Submitting feedback: \(sentiment.rawValue)")
+            if let ratingType = ratingType, let ratingScore = ratingScore {
+                print("[FeedbackPulse] Submitting feedback: \(ratingType.rawValue) score \(ratingScore)")
+            } else if let sentiment = sentiment {
+                print("[FeedbackPulse] Submitting feedback: \(sentiment.rawValue)")
+            }
         }
 
         let task = session.dataTask(with: request) { [weak self] data, response, error in

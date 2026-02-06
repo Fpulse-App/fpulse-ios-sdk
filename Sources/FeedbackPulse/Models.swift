@@ -16,6 +16,16 @@ public enum FeedbackSentiment: String, Codable {
     case negative = "negative"
 }
 
+// MARK: - Rating Type
+
+/// Rating type options for feedback submission
+public enum RatingType: String, Codable {
+    case thumbs = "thumbs"
+    case emoji = "emoji"
+    case stars = "stars"
+    case nps = "nps"
+}
+
 // MARK: - Environment
 
 /// Environment for feedback submission
