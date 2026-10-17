@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="https://fpulse.app/static/images/logo100x100.png" alt="Feedback Pulse" width="80" height="80">
+  <img src="https://fpulse.app/static/images/logo100x100.png" alt="F-Pulse App" width="80" height="80">
 </p>
 
-<h1 align="center">FeedbackPulse iOS SDK</h1>
+<h1 align="center">F-Pulse App iOS SDK</h1>
 
 <p align="center">
   <strong>Collect user feedback in your iOS and macOS apps with ease</strong>
@@ -71,7 +71,7 @@ import FeedbackPulse
 FeedbackPulse.configure(apiKey: "fp_your_api_key")
 ```
 
-> Get your API key from the [Feedback Pulse Dashboard](https://fpulse.app/dashboard/settings)
+> Get your API key from the [F-Pulse App dashboard](https://fpulse.app/dashboard/projects) (Projects page)
 
 ### 2. Collect Feedback
 
@@ -198,7 +198,7 @@ Initialize the SDK with your API key.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `apiKey` | `String` | required | Your Feedback Pulse API key |
+| `apiKey` | `String` | required | Your F-Pulse App API key |
 | `environment` | `FeedbackEnvironment` | `.production` | Target environment |
 
 ### `FeedbackPulse.submit(sentiment:comment:metadata:completion:)`
@@ -308,6 +308,7 @@ struct ContentView: View {
 ## Support
 
 - **Documentation**: [fpulse.app/docs](https://fpulse.app/docs)
+- **More examples** (Android, Flutter, web widget, webhooks): [Fpulse-App/fpulse-examples](https://github.com/Fpulse-App/fpulse-examples)
 - **Issues**: [GitHub Issues](https://github.com/ztuskes/feedbackPulse/issues)
 - **Email**: support@fpulse.app
 
@@ -320,5 +321,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 <p align="center">
-  Made with ❤️ by <a href="https://fpulse.app">Feedback Pulse</a>
+  Made with ❤️ by <a href="https://fpulse.app">F-Pulse App</a>
 </p>
