@@ -45,7 +45,7 @@ Add FeedbackPulse to your project in Xcode:
 1. Go to **File → Add Package Dependencies**
 2. Enter the repository URL:
    ```
-   https://github.com/ztuskes/feedbackPulse
+   https://github.com/Fpulse-App/feedbackPulse
    ```
 3. Select version **1.0.0** or later
 4. Click **Add Package**
@@ -54,7 +54,7 @@ Add FeedbackPulse to your project in Xcode:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/ztuskes/feedbackPulse", from: "1.0.0")
+    .package(url: "https://github.com/Fpulse-App/feedbackPulse", from: "1.0.0")
 ]
 ```
 
@@ -309,7 +309,7 @@ struct ContentView: View {
 
 - **Documentation**: [fpulse.app/docs](https://fpulse.app/docs)
 - **More examples** (Android, Flutter, web widget, webhooks): [Fpulse-App/fpulse-examples](https://github.com/Fpulse-App/fpulse-examples)
-- **Issues**: [GitHub Issues](https://github.com/ztuskes/feedbackPulse/issues)
+- **Issues**: [GitHub Issues](https://github.com/Fpulse-App/feedbackPulse/issues)
 - **Email**: support@fpulse.app
 
 ---
